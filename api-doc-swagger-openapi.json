@@ -26,6 +26,13 @@
       "name": "Orders"
     }
   ],
+  "components": {
+    "cookieAuth": {
+      "type": "apiKey",
+      "in": "cookie",
+      "name": "jwt"
+    }
+  },
   "paths": {
     "/auth/register": {
       "post": {
@@ -48,10 +55,20 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Success! Please check your email to verify your account!"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -77,10 +94,21 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "user": {
+                      "userID": "674d9f90a5621de9520ebe2d",
+                      "name": "mg111",
+                      "role": "user"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -92,40 +120,62 @@
           "Auth"
         ],
         "summary": "Logout user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "User logged out!"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Unauthorized"
+                  }
+                }
+              }
             }
           }
         }
       }
     },
-    "/auth/verify-email": {
-      "post": {
+    "/auth/verify-email?verificationToken={token}&email={email}": {
+      "get": {
         "tags": [
           "Auth"
         ],
         "summary": "Verify email",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "verificationToken": "6334b376160c58dd2eb7215274597cd2f2e4703b2c112a62bf1794bc705240b7a7e4d68fb395650b",
-                  "email": "user1@gmail.com"
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Email verified!"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -155,7 +205,17 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Password successfully reset!"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -180,10 +240,20 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Please check your email to reset your password!"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -195,11 +265,53 @@
           "Users"
         ],
         "summary": "Get all users",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "users": [
+                      {
+                        "name": "test2",
+                        "email": "test2@gmail.com",
+                        "role": "user",
+                        "isVerified": true,
+                        "verified": "2023-08-19T16:21:56.643Z",
+                        "id": "64e0ec0163d91940458da7d1"
+                      },
+                      {
+                        "name": "test",
+                        "email": "test@gmail.com",
+                        "role": "user",
+                        "isVerified": true,
+                        "verified": "2023-08-19T16:21:56.643Z",
+                        "id": "64e0ec0163d91940458da7d1"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Unauthorized"
+                  }
+                }
+              }
             }
           }
         }
@@ -211,11 +323,30 @@
           "Users"
         ],
         "summary": "Get single user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "user": {
+                      "name": "test",
+                      "email": "test@gmail.com",
+                      "role": "user",
+                      "isVerified": true,
+                      "verified": "2023-08-19T16:21:56.643Z",
+                      "id": "64e0ec0163d91940458da7d1"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -227,11 +358,39 @@
           "Users"
         ],
         "summary": "Show current user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "userID": {
+                          "type": "string",
+                          "example": "645f977f0b52892c311eb265"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "test"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -243,6 +402,11 @@
           "Users"
         ],
         "summary": "Update user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -260,7 +424,18 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "user": {
+                      "userID": "674d9f90a5621de9520ebe2d",
+                      "name": "test2",
+                      "role": "user"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -272,6 +447,11 @@
           "Users"
         ],
         "summary": "Update user password",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -289,7 +469,14 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Password updated!"
+                  }
+                }
+              }
             }
           }
         }
@@ -305,7 +492,38 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "products": [
+                      {
+                        "name": "accent Chairrr",
+                        "price": 25999,
+                        "description": "Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat, authentic chillwave trust fund. Viral typewriter fingerstache pinterest pork belly narwhal. Schlitz venmo everyday carry kitsch pitchfork chillwave iPhone taiyaki trust fund hashtag kinfolk microdosing gochujang live-edge",
+                        "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                        "category": "office",
+                        "company": "marcos",
+                        "colors": [
+                          "#ff0000",
+                          "#00ff00",
+                          "#0000ff"
+                        ],
+                        "featured": false,
+                        "freeShipping": false,
+                        "inventory": 15,
+                        "averageRating": 1,
+                        "numOfReviews": 2,
+                        "user": "645f977f0b52892c311eb265",
+                        "createdAt": "2024-12-01T11:24:58.173Z",
+                        "updatedAt": "2024-12-01T20:57:54.683Z",
+                        "id": "674c478a397a664d48cd8aec"
+                      }
+                    ],
+                    "count": 1
+                  }
+                }
+              }
             }
           }
         }
@@ -315,6 +533,11 @@
           "Products"
         ],
         "summary": "Create product",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -329,7 +552,7 @@
                     "#00ff00",
                     "#0000ff"
                   ],
-                  "company": "marcoss",
+                  "company": "marcos",
                   "description": "Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat, authentic chillwave trust fund. Viral typewriter fingerstache pinterest pork belly narwhal. Schlitz venmo everyday carry kitsch pitchfork chillwave iPhone taiyaki trust fund hashtag kinfolk microdosing gochujang live-edge",
                   "category": "office"
                 }
@@ -338,10 +561,38 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "product": {
+                      "name": "accent chair",
+                      "price": 25999,
+                      "description": "Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat, authentic chillwave trust fund. Viral typewriter fingerstache pinterest pork belly narwhal. Schlitz venmo everyday carry kitsch pitchfork chillwave iPhone taiyaki trust fund hashtag kinfolk microdosing gochujang live-edge",
+                      "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                      "category": "office",
+                      "company": "marcos",
+                      "colors": [
+                        "#ff0000",
+                        "#00ff00",
+                        "#0000ff"
+                      ],
+                      "featured": false,
+                      "freeShipping": false,
+                      "inventory": 15,
+                      "averageRating": 0,
+                      "numOfReviews": 0,
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2025-03-02T21:41:29.715Z",
+                      "updatedAt": "2025-03-02T21:41:29.715Z",
+                      "id": "67c4d089ded572688c4eb283"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -357,7 +608,35 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "product": {
+                      "name": "accent Chairrr",
+                      "price": 25999,
+                      "description": "Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat, authentic chillwave trust fund. Viral typewriter fingerstache pinterest pork belly narwhal. Schlitz venmo everyday carry kitsch pitchfork chillwave iPhone taiyaki trust fund hashtag kinfolk microdosing gochujang live-edge",
+                      "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                      "category": "office",
+                      "company": "marcos",
+                      "colors": [
+                        "#ff0000",
+                        "#00ff00",
+                        "#0000ff"
+                      ],
+                      "featured": false,
+                      "freeShipping": false,
+                      "inventory": 15,
+                      "averageRating": 1,
+                      "numOfReviews": 2,
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2024-12-01T11:24:58.173Z",
+                      "updatedAt": "2024-12-01T20:57:54.683Z",
+                      "id": "674c478a397a664d48cd8aec"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -369,6 +648,11 @@
           "Products"
         ],
         "summary": "Update product",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -385,7 +669,35 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "product": {
+                      "name": "accent Chairrr",
+                      "price": 25999,
+                      "description": "Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat, authentic chillwave trust fund. Viral typewriter fingerstache pinterest pork belly narwhal. Schlitz venmo everyday carry kitsch pitchfork chillwave iPhone taiyaki trust fund hashtag kinfolk microdosing gochujang live-edge",
+                      "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                      "category": "office",
+                      "company": "marcos",
+                      "colors": [
+                        "#ff0000",
+                        "#00ff00",
+                        "#0000ff"
+                      ],
+                      "featured": false,
+                      "freeShipping": false,
+                      "inventory": 15,
+                      "averageRating": 1,
+                      "numOfReviews": 2,
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2024-12-01T11:24:58.173Z",
+                      "updatedAt": "2025-03-02T21:53:58.482Z",
+                      "id": "674c478a397a664d48cd8aec"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -397,11 +709,23 @@
           "Products"
         ],
         "summary": "Delete product",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Product deleted successfully!"
+                  }
+                }
+              }
             }
           }
         }
@@ -413,13 +737,18 @@
           "Products"
         ],
         "summary": "Upload image",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "myImage": {
+                  "image": {
                     "type": "string",
                     "format": "binary"
                   }
@@ -429,10 +758,17 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "image": "/uploads/couch.jpeg"
+                  }
+                }
+              }
             }
           }
         }
@@ -448,7 +784,38 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "reviews": [
+                      {
+                        "_id": "674c6560da10648cb48050fe",
+                        "rating": 1,
+                        "title": "Review 2",
+                        "comment": "Comment 2",
+                        "user": "64e0ec0163d91940458da7d1",
+                        "product": "674c478a397a664d48cd8aec",
+                        "createdAt": "2024-12-01T13:32:16.484Z",
+                        "updatedAt": "2024-12-01T13:32:16.484Z",
+                        "id": "674c6560da10648cb48050fe"
+                      },
+                      {
+                        "_id": "674ccdd21058f14d27c5d7a4",
+                        "rating": 1,
+                        "title": "Review 3",
+                        "comment": "Comment 3",
+                        "user": "6748434b1a1bf4ac4f5ee0e6",
+                        "product": "674c478a397a664d48cd8aec",
+                        "createdAt": "2024-12-01T20:57:54.472Z",
+                        "updatedAt": "2024-12-01T20:57:54.472Z",
+                        "id": "674ccdd21058f14d27c5d7a4"
+                      }
+                    ],
+                    "count": 2
+                  }
+                }
+              }
             }
           }
         }
@@ -464,13 +831,58 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "reviews": [
+                      {
+                        "rating": 1,
+                        "title": "Review 2",
+                        "comment": "Comment 2",
+                        "user": {
+                          "name": "test2",
+                          "id": "64e0ec0163d91940458da7d1"
+                        },
+                        "product": {
+                          "name": "accent Chairrr",
+                          "price": 25999,
+                          "company": "marcos",
+                          "id": "674c478a397a664d48cd8aec"
+                        },
+                        "createdAt": "2024-12-01T13:32:16.484Z",
+                        "updatedAt": "2024-12-01T13:32:16.484Z",
+                        "id": "674c6560da10648cb48050fe"
+                      },
+                      {
+                        "rating": 1,
+                        "title": "Review 3",
+                        "comment": "Comment 3",
+                        "user": {
+                          "name": "mg11",
+                          "id": "6748434b1a1bf4ac4f5ee0e6"
+                        },
+                        "product": {
+                          "name": "accent Chairrr",
+                          "price": 25999,
+                          "company": "marcos",
+                          "id": "674c478a397a664d48cd8aec"
+                        },
+                        "createdAt": "2024-12-01T20:57:54.472Z",
+                        "updatedAt": "2024-12-01T20:57:54.472Z",
+                        "id": "674ccdd21058f14d27c5d7a4"
+                      }
+                    ],
+                    "count": 2
+                  }
+                }
+              }
             }
           }
         }
       }
     },
-    "/reviews/674c478a397a664d48cd8aec": {
+    "/reviews/67c4dc6dd6368f1f29048c4f": {
       "get": {
         "tags": [
           "Reviews"
@@ -480,7 +892,23 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "review": {
+                      "rating": 1,
+                      "title": "Review 2",
+                      "comment": "Comment 3",
+                      "user": "645f977f0b52892c311eb265",
+                      "product": "674c478a397a664d48cd8aec",
+                      "createdAt": "2025-03-02T22:32:13.144Z",
+                      "updatedAt": "2025-03-02T22:32:13.144Z",
+                      "id": "67c4dc6dd6368f1f29048c4f"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -492,6 +920,11 @@
           "Reviews"
         ],
         "summary": "Create review",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -499,8 +932,8 @@
                 "type": "object",
                 "example": {
                   "product": "674c478a397a664d48cd8aec",
-                  "title": "Review 2",
-                  "comment": "Comment 3",
+                  "title": "Review 4",
+                  "comment": "Comment 4",
                   "rating": 1
                 }
               }
@@ -508,10 +941,26 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "review": {
+                      "rating": 1,
+                      "title": "Review 4",
+                      "comment": "Comment 4",
+                      "user": "645f977f0b52892c311eb265",
+                      "product": "674c478a397a664d48cd8aec",
+                      "createdAt": "2025-03-02T22:32:13.144Z",
+                      "updatedAt": "2025-03-02T22:32:13.144Z",
+                      "id": "67c4dc6dd6368f1f29048c4f"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -523,6 +972,11 @@
           "Reviews"
         ],
         "summary": "Update review",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -542,7 +996,23 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "review": {
+                      "rating": 5,
+                      "title": "Review 2",
+                      "comment": "Comment 2",
+                      "user": "645f977f0b52892c311eb265",
+                      "product": "674c478a397a664d48cd8aec",
+                      "createdAt": "2025-03-02T22:32:13.144Z",
+                      "updatedAt": "2025-03-02T22:39:40.593Z",
+                      "id": "67c4dc6dd6368f1f29048c4f"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -554,11 +1024,23 @@
           "Reviews"
         ],
         "summary": "Delete review",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Review deleted successfully!"
+                  }
+                }
+              }
             }
           }
         }
@@ -570,11 +1052,91 @@
           "Orders"
         ],
         "summary": "Get all orders",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "orders": [
+                      {
+                        "tax": 399,
+                        "shippingFee": 499,
+                        "subTotal": 77997,
+                        "total": 78895,
+                        "orderItems": [
+                          {
+                            "name": "accent Chairrr",
+                            "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                            "price": 25999,
+                            "amount": 3,
+                            "product": "674c478a397a664d48cd8aec",
+                            "_id": "674d82b878a73a291590a939"
+                          }
+                        ],
+                        "status": "pending",
+                        "clientSecret": "RandomValue",
+                        "user": "64e0ec0163d91940458da7d1",
+                        "createdAt": "2024-12-02T09:49:44.049Z",
+                        "updatedAt": "2024-12-02T09:49:44.049Z",
+                        "id": "674d82b878a73a291590a938"
+                      },
+                      {
+                        "tax": 399,
+                        "shippingFee": 499,
+                        "subTotal": 77997,
+                        "total": 78895,
+                        "orderItems": [
+                          {
+                            "name": "accent Chairrr",
+                            "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                            "price": 25999,
+                            "amount": 3,
+                            "product": "674c478a397a664d48cd8aec",
+                            "_id": "674d832c920fc40fab6a83e3"
+                          }
+                        ],
+                        "status": "pending",
+                        "clientSecret": "RandomValue",
+                        "user": "64e0ec0163d91940458da7d1",
+                        "createdAt": "2024-12-02T09:51:40.505Z",
+                        "updatedAt": "2024-12-02T09:51:40.505Z",
+                        "id": "674d832c920fc40fab6a83e2"
+                      },
+                      {
+                        "tax": 399,
+                        "shippingFee": 499,
+                        "subTotal": 77997,
+                        "total": 78895,
+                        "orderItems": [
+                          {
+                            "name": "accent Chairrr",
+                            "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                            "price": 25999,
+                            "amount": 3,
+                            "product": "674c478a397a664d48cd8aec",
+                            "_id": "674d85fa31c6f82c793714fc"
+                          }
+                        ],
+                        "status": "pending",
+                        "clientSecret": "RandomValue",
+                        "user": "64e0ec0163d91940458da7d1",
+                        "createdAt": "2024-12-02T10:03:38.868Z",
+                        "updatedAt": "2024-12-02T10:03:38.868Z",
+                        "id": "674d85fa31c6f82c793714fb"
+                      }
+                    ],
+                    "count": 3
+                  }
+                }
+              }
             }
           }
         }
@@ -584,6 +1146,11 @@
           "Orders"
         ],
         "summary": "Create order",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -607,26 +1174,88 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "order": {
+                      "tax": 399,
+                      "shippingFee": 499,
+                      "subTotal": 77997,
+                      "total": 78895,
+                      "orderItems": [
+                        {
+                          "name": "accent Chairrr",
+                          "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                          "price": 25999,
+                          "amount": 3,
+                          "product": "674c478a397a664d48cd8aec",
+                          "_id": "67c4e1aeacf955dc5c5b7835"
+                        }
+                      ],
+                      "status": "pending",
+                      "clientSecret": "RandomValue",
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2025-03-02T22:54:38.134Z",
+                      "updatedAt": "2025-03-02T22:54:38.134Z",
+                      "id": "67c4e1aeacf955dc5c5b7834"
+                    },
+                    "clientSecret": "RandomValue"
+                  }
+                }
+              }
             }
           }
         }
       }
     },
-    "/orders/6435e4bc6642e1d0567b95d5": {
+    "/orders/67c4e1aeacf955dc5c5b7834": {
       "get": {
         "tags": [
           "Orders"
         ],
         "summary": "Get single order",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "order": {
+                      "tax": 399,
+                      "shippingFee": 499,
+                      "subTotal": 77997,
+                      "total": 78895,
+                      "orderItems": [
+                        {
+                          "name": "accent Chairrr",
+                          "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                          "price": 25999,
+                          "amount": 3,
+                          "product": "674c478a397a664d48cd8aec",
+                          "_id": "67c4e1aeacf955dc5c5b7835"
+                        }
+                      ],
+                      "status": "pending",
+                      "clientSecret": "RandomValue",
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2025-03-02T22:54:38.134Z",
+                      "updatedAt": "2025-03-02T22:54:38.134Z",
+                      "id": "67c4e1aeacf955dc5c5b7834"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -636,6 +1265,11 @@
           "Orders"
         ],
         "summary": "Update order",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -652,7 +1286,36 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "order": {
+                      "tax": 399,
+                      "shippingFee": 499,
+                      "subTotal": 77997,
+                      "total": 78895,
+                      "orderItems": [
+                        {
+                          "name": "accent Chairrr",
+                          "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                          "price": 25999,
+                          "amount": 3,
+                          "product": "674c478a397a664d48cd8aec",
+                          "_id": "67c4e1aeacf955dc5c5b7835"
+                        }
+                      ],
+                      "status": "paid",
+                      "clientSecret": "RandomValue",
+                      "user": "645f977f0b52892c311eb265",
+                      "createdAt": "2025-03-02T22:54:38.134Z",
+                      "updatedAt": "2025-03-02T23:03:14.785Z",
+                      "paymentID": "RandomID",
+                      "id": "67c4e1aeacf955dc5c5b7834"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -664,11 +1327,47 @@
           "Orders"
         ],
         "summary": "Get current user orders",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "orders": [
+                      {
+                        "tax": 399,
+                        "shippingFee": 499,
+                        "subTotal": 77997,
+                        "total": 78895,
+                        "orderItems": [
+                          {
+                            "name": "accent Chairrr",
+                            "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+                            "price": 25999,
+                            "amount": 3,
+                            "product": "674c478a397a664d48cd8aec",
+                            "_id": "67c4e1aeacf955dc5c5b7835"
+                          }
+                        ],
+                        "status": "pending",
+                        "clientSecret": "RandomValue",
+                        "user": "645f977f0b52892c311eb265",
+                        "createdAt": "2025-03-02T22:54:38.134Z",
+                        "updatedAt": "2025-03-02T22:54:38.134Z",
+                        "id": "67c4e1aeacf955dc5c5b7834"
+                      }
+                    ],
+                    "count": 1
+                  }
+                }
+              }
             }
           }
         }

@@ -134,7 +134,7 @@ const deleteProduct = async (req, res) => {
  * @function uploadImage
  * @param {Object} req - Express request object
  * @param {Object} req.files - Uploaded files
- * @param {Object} req.files.myImage - Product image file
+ * @param {Object} req.files.image - Product image file
  * @param {Object} res - Express response object
  * @returns {Promise<void>} - Returns success message with image path
  * @throws {CustomError.BadRequestError} - If no image uploaded
@@ -147,7 +147,7 @@ const uploadImage = async (req, res) => {
     throw new CustomError.BadRequestError("Error! No file uploaded!");
   }
 
-  const productImage = req.files.myImage;
+  const productImage = req.files.image;
 
   if (!productImage.mimetype.startsWith("image")) {
     throw new CustomError.BadRequestError("Error! Please upload an image!");
@@ -161,8 +161,7 @@ const uploadImage = async (req, res) => {
 
   const imagePath = path.join(
     __dirname,
-    "../public/uploads/",
-    productImage.name
+    "../../public/uploads/" + `${productImage.name}`
   );
 
   await productImage.mv(imagePath);

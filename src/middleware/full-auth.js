@@ -1,5 +1,5 @@
 const CustomError = require("../errors");
-const { isTokenValid } = require("../utils/jwt");
+// const { isTokenValid } = require("../utils/jwt");
 
 /**
  * Middleware to authenticate user from different token sources
@@ -15,35 +15,35 @@ const { isTokenValid } = require("../utils/jwt");
  * @param {Function} next - Express next middleware function
  * @throws {UnauthenticatedError} If no token is found or token is invalid
  */
-const authenticateUser = async (req, res, next) => {
-  let token;
-  // check header
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer")) {
-    token = authHeader.split(" ")[1];
-  }
-  // check cookies
-  else if (req.cookies.token) {
-    token = req.cookies.token;
-  }
+// const authenticateUser = async (req, res, next) => {
+//   let token;
+//   // check header
+//   const authHeader = req.headers.authorization;
+//   if (authHeader && authHeader.startsWith("Bearer")) {
+//     token = authHeader.split(" ")[1];
+//   }
+//   // check cookies
+//   else if (req.cookies.token) {
+//     token = req.cookies.token;
+//   }
 
-  if (!token) {
-    throw new CustomError.UnauthenticatedError("Authentication invalid");
-  }
-  try {
-    const payload = isTokenValid(token);
+//   if (!token) {
+//     throw new CustomError.UnauthenticatedError("Authentication invalid");
+//   }
+//   try {
+//     const payload = isTokenValid(token);
 
-    // Attach the user and his permissions to the req object
-    req.user = {
-      userId: payload.user.userId,
-      role: payload.user.role,
-    };
+//     // Attach the user and his permissions to the req object
+//     req.user = {
+//       userId: payload.user.userId,
+//       role: payload.user.role,
+//     };
 
-    next();
-  } catch (error) {
-    throw new CustomError.UnauthenticatedError("Authentication invalid");
-  }
-};
+//     next();
+//   } catch (error) {
+//     throw new CustomError.UnauthenticatedError("Authentication invalid");
+//   }
+// };
 
 /**
  * Middleware to authorize user roles for specific routes
@@ -66,4 +66,4 @@ const authorizeRoles = (...roles) => {
   };
 };
 
-module.exports = { authenticateUser, authorizeRoles };
+module.exports = { authorizeRoles };

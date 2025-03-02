@@ -39,14 +39,12 @@ const origin = config.ORIGIN;
  * @throws {CustomError.BadRequestError} - If email already exists
  */
 const register = async (req, res) => {
-  // Used unique in user model instead
-  /*     const {email} = req.body
-    const emailAlreadyExists = await User.findOne({email})
-    if(emailAlreadyExists){
-        throw new CustomError.BadRequestError("Email already exists!")
-    } */
-
   const { email, name, password } = req.body;
+
+  const emailAlreadyExists = await User.findOne({ email })
+  if (emailAlreadyExists) {
+    throw new CustomError.BadRequestError("Email already exists!")
+  }
 
   const isFirstAccount = (await User.countDocuments({})) === 0;
   const role = isFirstAccount ? "admin" : "user";
@@ -61,15 +59,6 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  //    // Create a user token object with specific user info
-  // const tokenUser = createTokenUser(user);
-
-  // // const token = createJWT({ payload: tokenUser });
-  // attachCookiesToResponse({ res, userObj: tokenUser });
-
-  // // Send tokenUser object instead of the whole user object
-  // res.status(StatusCodes.CREATED).json({ user: tokenUser });
-
   await sendVerificationEmail({
     name: user.name,
     email: user.email,
@@ -77,7 +66,6 @@ const register = async (req, res) => {
     origin,
   });
 
-  // Send verification token back, only while testing in postman
   res.status(StatusCodes.CREATED).json({
     msg: "Success! please check your email to verify your account!",
   });
@@ -108,9 +96,9 @@ const testRegister = async (req, res) => {
     verificationToken,
   });
 
-     // Create a user token object with specific user info
+  // Create a user token object with specific user info
   const tokenUser = createTokenUser(user);
-  
+
   // const token = createJWT({ payload: tokenUser });
   attachCookiesToResponse({ res, userObj: tokenUser });
 
@@ -177,8 +165,8 @@ const login = async (req, res) => {
 
     attachCookiesToResponse({ res, userObj: tokenUser, refreshToken });
 
-    // console.log(req.signedCookies);
-    // console.log(req.cookies);
+    // console.log("SignedCookies:", req.signedCookies);
+    // console.log("Cookies:", req.cookies);
 
     res.status(StatusCodes.OK).json({ user: tokenUser });
 
@@ -198,11 +186,11 @@ const login = async (req, res) => {
   };
 
   await Token.create(userToken);
-  
+
   attachCookiesToResponse({ res, userObj: tokenUser, refreshToken });
 
-  // console.log(req.signedCookies);
-  // console.log(req.cookies);
+  // console.log("SignedCookies:", req.signedCookies);
+  // console.log("Cookies:", req.cookies);
 
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };

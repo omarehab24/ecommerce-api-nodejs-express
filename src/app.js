@@ -12,6 +12,7 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const morgan = require("morgan");
 const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
@@ -60,11 +61,7 @@ app.use(helmet());
 app.use(xss());
 app.use(mongoSanitize());
 app.use(cookieParser(config.JWT_SECRET)); // Sign the cookies
-const options = {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: "E-commerce API Documentation",
-};
-app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerJson, options));
+app.use(morgan("tiny"));
 
 /**
  * Application Routes
@@ -73,12 +70,21 @@ app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerJson, options));
  * - productsRouter: Product management routes
  * - reviewRouter: Review management routes
  * - orderRouter: Order management routes
+ * - swaggerUI: Swagger UI for API documentation
  */
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/orders", orderRouter);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJson, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "E-commerce API Documentation",
+}));
 
 /**
  * Error Handling Middleware
