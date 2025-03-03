@@ -1,179 +1,352 @@
-##### **- Add this root URL before each endpoint to access the deployed server**
+# E-commerce API Documentation
 
-It might take some time to load due to Render's free tier limitation
-**(https://ecommerce-api-e7iw.onrender.com)**
+It might take some time to load due to Render's free tier cold start limitation
 
----
+API Base URL: **https://ecommerce-api-e7iw.onrender.com**
 
-# Ecommerce API Documentation
+## Table of Contents
 
-#### Endpoints:
-1. **Auth:**
-   - **Register User:** `/api/v1/auth/register`
-   - **Login User:** `/api/v1/auth/login`
-   - **Logout User:** `/api/v1/auth/logout`
-   - **Verify Email:** `/api/v1/auth/verify-email`
-   - **Reset Password:** `/api/v1/auth/reset-password`
-   - **Forgot Password:** `/api/v1/auth/forgot-password`
+- [Authentication](#authentication)
+  - [Register](#register)
+  - [Login](#login)
+  - [Logout](#logout)
+  - [Verify Email](#verify-email)
+  - [Forgot Password](#forgot-password)
+  - [Reset Password](#reset-password)
+- [Users](#users)
+  - [Get All Users](#get-all-users)
+  - [Get Single User](#get-single-user)
+  - [Show Current User](#show-current-user)
+  - [Update User](#update-user)
+  - [Update User Password](#update-user-password)
+- [Products](#products)
+  - [Get All Products](#get-all-products)
+  - [Create Product](#create-product)
+  - [Get Single Product](#get-single-product)
+  - [Update Product](#update-product)
+  - [Delete Product](#delete-product)
+  - [Upload Image](#upload-image)
+  - [Get Product Reviews](#get-product-reviews)
+- [Reviews](#reviews)
+  - [Get All Reviews](#get-all-reviews)
+  - [Get Single Review](#get-single-review)
+  - [Create Review](#create-review)
+  - [Update Review](#update-review)
+  - [Delete Review](#delete-review)
+- [Orders](#orders)
+  - [Get All Orders](#get-all-orders)
+  - [Create Order](#create-order)
+  - [Get Single Order](#get-single-order)
+  - [Update Order](#update-order)
+  - [Get Current User Orders](#get-current-user-orders)
 
-2. **Users:**
-   - **Get All Users:** `/api/v1/users/`
-   - **Get Single User:** `/api/v1/users/:id`
-   - **Show Current User:** `/api/v1/users/showMe`
-   - **Update User:** `/api/v1/users/updateUser`
-   - **Update User Password:** `/api/v1/users/updateUserPassword`
+## Authentication
 
-3. **Products:**
-   - **Get All Products:** `/api/v1/products/`
-   - **Get Single Product:** `/api/v1/products/:id`
-   - **Create Product:** `/api/v1/products/`
-   - **Update Product:** `/api/v1/products/:id`
-   - **Delete Product:** `/api/v1/products/:id`
-   - **Upload Image:** `/api/v1/products/uploadImage`
-   - **Get Product Reviews:** `/api/v1/products/:id/reviews`
+Authentication is handled using JWT tokens stored in cookies. Protected routes require authentication.
 
-4. **Reviews:**
-   - **Get All Reviews:** `/api/v1/reviews`
-   - **Get Single Review:** `/api/v1/reviews/:id`
-   - **Create Review:** `/api/v1/reviews/`
-   - **Update Review:** `/api/v1/reviews/:id`
-   - **Delete Review:** `/api/v1/reviews/:id`
+### Register
 
-5. **Orders:**
-   - **Get All Orders:** `/api/v1/orders/`
-   - **Get Single Order:** `/api/v1/orders/:id`
-   - **Get Current User Orders:** `/api/v1/orders/showAllMyOrders`
-   - **Create Order:** `/api/v1/orders/`
-   - **Update Order:** `/api/v1/orders/:id`
+Register a new user account.
 
-## Endpoints Documentation
-
-### Auth Endpoints
-
-1. **Register User:** `/api/v1/auth/register`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+- **URL**: `/auth/register`
+- **Method**: `POST`
+- **Auth required**: No
+- **Request Body**:
   ```json
   {
-    "name": "test",
-    "email": "test1@mail.com",
-    "password": "12345678"
+    "name": "test0",
+    "email": "test@example.com",
+    "password": "123456"
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**:
+    ```json
+    {
+      "msg": "Success! Please check your email to verify your account!"
+    }
+    ```
 
-2. **Login User:** `/api/v1/auth/login`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+### Login
+
+Login with existing user credentials.
+
+- **URL**: `/auth/login`
+- **Method**: `POST`
+- **Auth required**: No
+- **Request Body**:
   ```json
   {
-    "email": "admin@mail.com",
-    "password": "12345678"
+    "email": "test@example.com",
+    "password": "123456"
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**:
+    ```json
+    {
+      "user": {
+        "userID": "674d9f90a5621de9520ebe2d",
+        "name": "test",
+        "role": "user"
+      }
+    }
+    ```
 
-3. **Logout User:** `/api/v1/auth/logout`
-- **Method:** DELETE
-- **Request Headers:**
-  - None required
+### Logout
 
-4. **Verify Email:** `/api/v1/auth/verify-email`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+Logout the currently authenticated user.
+
+- **URL**: `/auth/logout`
+- **Method**: `DELETE`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "User logged out!"
+    }
+    ```
+
+### Verify Email
+
+Verify user email with verification token.
+
+- **URL**: `/auth/verify-email?verificationToken={token}&email={email}`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Email verified!"
+    }
+    ```
+
+### Forgot Password
+
+Request a password reset link.
+
+- **URL**: `/auth/forgot-password`
+- **Method**: `POST`
+- **Auth required**: No
+- **Request Body**:
   ```json
   {
-    "verificationToken": "token",
-    "email": "test1@mail.com"
+    "email": "test@example.com"
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**:
+    ```json
+    {
+      "msg": "Please check your email to reset your password!"
+    }
+    ```
 
-5. **Reset Password:** `/api/v1/auth/reset-password`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+### Reset Password
+
+Reset password with token received in email.
+
+- **URL**: `/auth/reset-password`
+- **Method**: `POST`
+- **Auth required**: No
+- **Request Body**:
   ```json
   {
-    "email": "test1@mail.com",
-    "password": "newPassword",
-    "token": "token"
+    "email": "test@example.com",
+    "password": "newpassword",
+    "token": "token-from-email"
   }
   ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Password successfully reset!"
+    }
+    ```
 
-6. **Forgot Password:** `/api/v1/auth/forgot-password`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+## Users
+
+### Get All Users
+
+Get a list of all users (admin only).
+
+- **URL**: `/users/`
+- **Method**: `GET`
+- **Auth required**: Yes (Admin)
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "users": [
+        {
+          "name": "test2",
+          "email": "test2@gmail.com",
+          "role": "user",
+          "isVerified": true,
+          "verified": "2023-08-19T16:21:56.643Z",
+          "id": "64e0ec0163d91940458da7d1"
+        },
+        {
+          "name": "test",
+          "email": "test@gmail.com",
+          "role": "user",
+          "isVerified": true,
+          "verified": "2023-08-19T16:21:56.643Z",
+          "id": "64e0ec0163d91940458da7d1"
+        }
+      ]
+    }
+    ```
+
+### Get Single User
+
+Get details of a specific user by ID.
+
+- **URL**: `/users/{userId}`
+- **Method**: `GET`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "user": {
+        "name": "test",
+        "email": "test@gmail.com",
+        "role": "user",
+        "isVerified": true,
+        "verified": "2023-08-19T16:21:56.643Z",
+        "id": "64e0ec0163d91940458da7d1"
+      }
+    }
+    ```
+
+### Show Current User
+
+Get the profile of the currently authenticated user.
+
+- **URL**: `/users/showMe`
+- **Method**: `GET`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "user": {
+        "userID": "645f977f0b52892c311eb265",
+        "name": "test",
+        "role": "user"
+      }
+    }
+    ```
+
+### Update User
+
+Update the currently authenticated user's profile.
+
+- **URL**: `/users/updateUser`
+- **Method**: `PATCH`
+- **Auth required**: Yes
+- **Request Body**:
   ```json
   {
-    "email": "test1@mail.com"
+    "name": "updated-name",
+    "email": "updated-email@example.com"
   }
   ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "user": {
+        "userID": "674d9f90a5621de9520ebe2d",
+        "name": "updated-name",
+        "role": "user"
+      }
+    }
+    ```
 
-### User Endpoints
+### Update User Password
 
-1. **Get All Users:** `/api/v1/users/`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+Update the currently authenticated user's password.
 
-2. **Get Single User:** `/api/v1/users/:id`
-- **Method:** GET
-- **Request Headers:**
-  - None required
-
-3. **Show Current User:** `/api/v1/users/showMe`
-- **Method:** GET
-- **Request Headers:**
-  - None required
-
-4. **Update User:** `/api/v1/users/updateUser`
-- **Method:** PATCH
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
-  ```json
-  {
-    "name": "test2",
-    "email": "test2@mail.com"
-  }
-  ```
-
-5. **Update User Password:** `/api/v1/users/updateUserPassword`
-- **Method:** PATCH
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+- **URL**: `/users/updateUserPassword`
+- **Method**: `PATCH`
+- **Auth required**: Yes
+- **Request Body**:
   ```json
   {
     "oldPassword": "123456",
     "newPassword": "1234567"
   }
   ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Password updated!"
+    }
+    ```
 
-### Product Endpoints
+## Products
 
-1. **Get All Products:** `/api/v1/products/`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+### Get All Products
 
-2. **Get Single Product:** `/api/v1/products/:id`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+Get a list of all products.
 
-3. **Create Product:** `/api/v1/products/`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+- **URL**: `/products/`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "products": [
+        {
+          "name": "accent Chair",
+          "price": 25999,
+          "description": "Product description...",
+          "image": "https://example.com/image.jpg",
+          "category": "office",
+          "company": "marcos",
+          "colors": ["#ff0000", "#00ff00", "#0000ff"],
+          "featured": false,
+          "freeShipping": false,
+          "inventory": 15,
+          "averageRating": 1,
+          "numOfReviews": 2,
+          "user": "645f977f0b52892c311eb265",
+          "createdAt": "2024-12-01T11:24:58.173Z",
+          "updatedAt": "2024-12-01T20:57:54.683Z",
+          "id": "674c478a397a664d48cd8aec"
+        }
+      ],
+      "count": 1
+    }
+    ```
+
+### Create Product
+
+Create a new product (admin only).
+
+- **URL**: `/products/`
+- **Method**: `POST`
+- **Auth required**: Yes (Admin)
+- **Request Body**:
   ```json
   {
     "name": "accent chair",
@@ -181,122 +354,240 @@ It might take some time to load due to Render's free tier limitation
     "image": "https://example.com/image.jpg",
     "colors": ["#ff0000", "#00ff00", "#0000ff"],
     "company": "marcos",
-    "description": "Product description",
+    "description": "Product description...",
     "category": "office"
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**: Returns the created product object
 
-4. **Update Product:** `/api/v1/products/:id`
-- **Method:** PATCH
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+### Get Single Product
+
+Get details of a specific product by ID.
+
+- **URL**: `/products/{productId}`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the product object
+
+### Update Product
+
+Update a specific product by ID (admin only).
+
+- **URL**: `/products/{productId}/`
+- **Method**: `PATCH`
+- **Auth required**: Yes (Admin)
+- **Request Body**:
   ```json
   {
-    "name": "updated accent chair"
+    "name": "Updated Product Name"
   }
   ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the updated product object
 
-5. **Delete Product:** `/api/v1/products/:id`
-- **Method:** DELETE
-- **Request Headers:**
-  - None required
+### Delete Product
 
-6. **Upload Image:** `/api/v1/products/uploadImage`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: multipart/form-data`
-- **Request Body:**
-  - Form data with key "myImage" and file value
+Delete a specific product by ID (admin only).
 
-7. **Get Product Reviews:** `/api/v1/products/:id/reviews`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+- **URL**: `/products/{productId}`
+- **Method**: `DELETE`
+- **Auth required**: Yes (Admin)
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Product deleted successfully!"
+    }
+    ```
 
-### Review Endpoints
+### Upload Image
 
-1. **Get All Reviews:** `/api/v1/reviews`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+Upload a product image (admin only).
 
-2. **Get Single Review:** `/api/v1/reviews/:id`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+- **URL**: `/products/uploadImage`
+- **Method**: `POST`
+- **Auth required**: Yes (Admin)
+- **Request Body**: `multipart/form-data` with field name `image`
+- **Success Response**:
+  - **Code**: 201
+  - **Content**:
+    ```json
+    {
+      "image": "/uploads/filename.jpeg"
+    }
+    ```
 
-3. **Create Review:** `/api/v1/reviews/`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+### Get Product Reviews
+
+Get all reviews for a specific product.
+
+- **URL**: `/products/{productId}/reviews`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns list of reviews for the product
+
+## Reviews
+
+### Get All Reviews
+
+Get a list of all reviews.
+
+- **URL**: `/reviews`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns list of all reviews with product and user details
+
+### Get Single Review
+
+Get details of a specific review by ID.
+
+- **URL**: `/reviews/{reviewId}`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the review object
+
+### Create Review
+
+Create a new product review.
+
+- **URL**: `/reviews/`
+- **Method**: `POST`
+- **Auth required**: Yes
+- **Request Body**:
   ```json
   {
-    "product": "product_id",
+    "product": "productId",
     "title": "Review Title",
     "comment": "Review Comment",
     "rating": 5
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**: Returns the created review object
 
-4. **Update Review:** `/api/v1/reviews/:id`
-- **Method:** PATCH
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+### Update Review
+
+Update a specific review by ID (review owner or admin).
+
+- **URL**: `/reviews/{reviewId}`
+- **Method**: `PATCH`
+- **Auth required**: Yes
+- **Request Body**:
   ```json
   {
-    "product": "product_id",
-    "title": "Updated Review Title",
-    "comment": "Updated Review Comment",
+    "title": "Updated Title",
+    "comment": "Updated Comment",
     "rating": 4
   }
   ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the updated review object
 
-5. **Delete Review:** `/api/v1/reviews/:id`
-- **Method:** DELETE
-- **Request Headers:**
-  - None required
+### Delete Review
 
-### Order Endpoints
+Delete a specific review by ID (review owner or admin).
 
-1. **Get All Orders:** `/api/v1/orders/`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+- **URL**: `/reviews/{reviewId}`
+- **Method**: `DELETE`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Review deleted successfully!"
+    }
+    ```
 
-2. **Get Single Order:** `/api/v1/orders/:id`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+## Orders
 
-3. **Get Current User Orders:** `/api/v1/orders/showAllMyOrders`
-- **Method:** GET
-- **Request Headers:**
-  - None required
+### Get All Orders
 
-4. **Create Order:** `/api/v1/orders/`
-- **Method:** POST
-- **Request Headers:**
-  - `Content-Type: application/json`
-- **Request Body:**
+Get a list of all orders (admin only).
+
+- **URL**: `/orders/`
+- **Method**: `GET`
+- **Auth required**: Yes (Admin)
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns list of all orders
+
+### Create Order
+
+Create a new order.
+
+- **URL**: `/orders/`
+- **Method**: `POST`
+- **Auth required**: Yes
+- **Request Body**:
   ```json
   {
-    "tax": 499,
-    "shippingFee": 799,
+    "tax": 399,
+    "shippingFee": 499,
     "items": [
       {
-        "name": "accent chair",
+        "name": "product name",
         "price": 25999,
+        "image": "https://example.com/image.jpg",
         "amount": 3,
         "product": "productId"
       }
     ]
   }
   ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**: Returns the created order object with a clientSecret
 
-5. **Update Order:** `/api/v1/orders/:id`
-- **Method:** PATCH
-- **Request Headers:**
-  - `Content-Type: application/json`
+### Get Single Order
+
+Get details of a specific order by ID (order owner or admin).
+
+- **URL**: `/orders/{orderId}`
+- **Method**: `GET`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the order object
+
+### Update Order
+
+Update payment information for a specific order (order owner or admin).
+
+- **URL**: `/orders/{orderId}`
+- **Method**: `PATCH`
+- **Auth required**: Yes
+- **Request Body**:
+  ```json
+  {
+    "paymentID": "payment-id-from-processor"
+  }
+  ```
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the updated order object with status changed to "paid"
+
+### Get Current User Orders
+
+Get all orders for the currently authenticated user.
+
+- **URL**: `/orders/showAllMyOrders`
+- **Method**: `GET`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns list of user's orders
