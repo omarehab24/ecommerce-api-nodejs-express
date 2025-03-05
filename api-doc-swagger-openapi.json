@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://ecommerce-api-e7iw.onrender.com"
+      "url": "https://ecommerce-api-e7iw.onrender.com/api/v1"
     }
   ],
   "tags": [

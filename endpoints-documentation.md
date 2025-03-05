@@ -2,7 +2,7 @@
 
 It might take some time to load due to Render's free tier cold start limitation
 
-API Base URL: **https://ecommerce-api-e7iw.onrender.com**
+API Base URL: **https://ecommerce-api-e7iw.onrender.com/api/v1**
 
 ## Table of Contents
 

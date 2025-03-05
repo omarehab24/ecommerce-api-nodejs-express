@@ -20,7 +20,6 @@ const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require("cookie-parser");
 const swaggerUI = require("swagger-ui-express");
 
-
 const connectDB = require("./db/connect");
 const config = require("./utils/config");
 const authRouter = require("./routes/authRoutes");
@@ -73,15 +72,19 @@ app.use(morgan("tiny"));
  * - swaggerUI: Swagger UI for API documentation
  */
 app.get("/", (req, res) => {
-  res.redirect("/api-docs");
+  res.redirect("/api/v1/api-docs");
 });
+app.get("/api/v1", (req, res) => {
+  res.redirect("/api/v1/api-docs");
+});
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/orders", orderRouter);
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJson, {
+app.use("/api/v1/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJson, {
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: "E-commerce API Documentation",
 }));
