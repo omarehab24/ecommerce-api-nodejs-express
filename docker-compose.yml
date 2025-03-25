@@ -2,7 +2,13 @@
 services:
   node-app:
     image: 22omar/store-api-node-express
+    env_file: .env
+  
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "3000:3000"
-    env_file:
-      - ./.env
+      - "80:80"
+    depends_on:
+      - node-app
