@@ -17,7 +17,7 @@ mongoose.set("strictQuery", true);
 const connectDB = () => {
   mongoose.connect(config.MONGODB_URI)
     .then(() => {
-      console.log("Connected to DB");
+      console.log("Connected to MongoDB");
     })
     .catch((error) => {
       console.error("Database connection error:", error);

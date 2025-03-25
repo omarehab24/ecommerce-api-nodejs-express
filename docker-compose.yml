@@ -1,0 +1,8 @@
+# This will serve as a common file to be used with both docker-compose.dev.yml and docker-compose.prod.yml
+services:
+  node-app:
+    image: 22omar/store-api-node-express
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
