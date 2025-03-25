@@ -3,7 +3,17 @@ services:
   node-app:
     image: 22omar/store-api-node-express
     env_file: .env
-  
+    deploy:
+      mode: replicated
+      # Specify the number of replicas
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        
   nginx:
     image: nginx:stable-alpine
     volumes:
