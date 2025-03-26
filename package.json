@@ -1,11 +1,11 @@
 {
   "name": "ecommerce-api",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "description": "ECommerce API",
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=production node ./src/server.js",
-    "dev": "NODE_ENV=development nodemon ./src/server.js",
+    "dev": "NODE_ENV=development nodemon --legacy-watch ./src/server.js",
     "test:auth": "NODE_ENV=test node --test ./tests/auth.test.js",
     "test:users": "NODE_ENV=test node --test ./tests/user.test.js",
     "test:products": "NODE_ENV=test node --test ./tests/product.test.js",
@@ -35,12 +35,12 @@
     "nodemailer": "^6.9.2",
     "swagger-ui-express": "^5.0.1",
     "validator": "^13.6.0",
-    "xss-clean": "^0.1.1"
-  },
-  "devDependencies": {
+    "xss-clean": "^0.1.1",
     "@eslint/js": "^9.16.0",
     "eslint": "^9.16.0",
-    "globals": "^15.13.0",
+    "globals": "^15.13.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.9",
     "supertest": "^6.3.3",
     "supertest-session": "^4.1.0"

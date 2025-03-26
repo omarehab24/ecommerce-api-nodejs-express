@@ -5,8 +5,8 @@ services:
     env_file: .env
     deploy:
       mode: replicated
-      # Specify the number of replicas
-      replicas: 1
+      # Specify the number of replicated node-app containers
+      replicas: 2
       update_config:
         parallelism: 1
         delay: 10s
