@@ -52,8 +52,8 @@ app.use(express.json());
 app.use(cors());
 app.use(
   rateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 60,
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 60, // limit each IP to 60 requests per windowMs
   })
 );
 app.use(helmet());

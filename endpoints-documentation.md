@@ -1,8 +1,8 @@
 # E-commerce API Documentation
 
-It might take some time to load due to Render's free tier cold start limitation
+Ngrok is used as a secure tunnel. Using a free domain temporarily.
 
-API Base URL: **https://ecommerce-api-e7iw.onrender.com/api/v1**
+API Base URL: **https://kind-willingly-halibut.ngrok-free.app/api/v1**
 
 ## Table of Contents
 

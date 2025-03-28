@@ -4,11 +4,15 @@
 A full-featured REST API for ecommerce applications, built with Node.js and Express.js following the MVC (Model-View-Controller) pattern. This API provides comprehensive endpoints for managing products, users, orders, and reviews in an ecommerce platform.
 
 ## Base URL
-[https://ecommerce-api-e7iw.onrender.com](https://ecommerce-api-e7iw.onrender.com)
-
+Ngrok is used as a secure tunnel. Using a free domain temporarily.
+**Hosted on**: AWS EC2 with Docker containerization
+[https://kind-willingly-halibut.ngrok-free.app](https://kind-willingly-halibut.ngrok-free.app)
 
 ## Endpoints Documentation
 [https://github.com/omarehab24/Ecommerce-API/blob/master/endpoints-documentation.md](https://github.com/omarehab24/Ecommerce-API/blob/master/endpoints-documentation.md)
+
+## Docker Usage Documentation
+[https://github.com/omarehab24/Ecommerce-API/blob/master/docker-documentation.md](https://github.com/omarehab24/Ecommerce-API/blob/master/docker-documentation.md)
 
 ## Key Features
 - **Authentication & Authorization**: Complete user management with JWT-based authentication
@@ -19,11 +23,14 @@ A full-featured REST API for ecommerce applications, built with Node.js and Expr
 
 ## Technical Stack
 - **Backend Framework**: Node.js with Express.js
-- **Database**: MongoDB Atlas with Mongoose ODM
-- **Authentication**: JSON Web Tokens (JWT)
-- **Media Storage**: Cloudinary for image hosting
+- **Database**: MongoDB
+- **Authentication**: JSON Web Tokens (JWT) via signed cookies
+- **Media Storage**: AWS S3
 - **Email Service**: Nodemailer with gmail SMTP for transactional emails
-- **Payment Gateway**: Stripe for order transactions
+- **Reverse Proxy & Load Balancing**: Nginx
+- **Containerization**: Docker
+- **Orchestration**: Docker Swarm
+- **Hosting**: AWS EC2, MongoDB Atlas
 
 ## Security Features
 - Password encryption with bcryptjs
@@ -32,6 +39,7 @@ A full-featured REST API for ecommerce applications, built with Node.js and Expr
 - XSS protection
 - Rate limiting
 - MongoDB query sanitization
+- HTTPS
 
 ## API Structure
 
@@ -74,6 +82,11 @@ A full-featured REST API for ecommerce applications, built with Node.js and Expr
 ## Error Handling
 The API uses standard HTTP status codes and returns detailed error messages in JSON format.
 
-For detailed endpoint documentation and request/response examples, please refer to the specific endpoint documentation.
+## Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
 
