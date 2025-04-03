@@ -13,7 +13,7 @@
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const Product = require("../models/Product");
-const path = require("path");
+const Image = require("../models/Image");
 
 /**
  * Create a new product
@@ -62,7 +62,7 @@ const getAllProducts = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   // Note: "reviews" can't be queried, because it's a virtual
   const { id: productID } = req.params;
-  const product = await Product.findOne({ _id: productID }).populate("reviews");
+  const product = await Product.findOne({ _id: productID }).populate("reviews").populate("image");
 
   if (!product) {
     throw new CustomError.NotFoundError("Product not found!");
@@ -129,46 +129,47 @@ const deleteProduct = async (req, res) => {
 };
 
 /**
- * Upload product image
+ * Upload a product image to AWS S3 using MulterS3
  * @async
- * @function uploadImage
+ * @function uploadProductImage
  * @param {Object} req - Express request object
- * @param {Object} req.files - Uploaded files
- * @param {Object} req.files.image - Product image file
+ * @param {Object} req.params - URL parameters
+ * @param {string} req.params.id - Product ID
+ * @param {Object} req.file - File object containing the uploaded image
  * @param {Object} res - Express response object
- * @returns {Promise<void>} - Returns success message with image path
- * @throws {CustomError.BadRequestError} - If no image uploaded
- * @throws {CustomError.BadRequestError} - If invalid image format
+ * @returns {Promise<void>} - Returns the created image
+ * @throws {CustomError.BadRequestError} - If no file is uploaded
+ * @throws {CustomError.NotFoundError} - If product not found
  */
-const uploadImage = async (req, res) => {
-  // console.log(req.files);
-
-  if (!req.files) {
-    throw new CustomError.BadRequestError("Error! No file uploaded!");
+const uploadProductImage = async (req, res) => {
+  
+  if (!req.file) {
+    return new CustomError.BadRequestError("No file uploaded");
   }
 
-  const productImage = req.files.image;
+  const { id: productID } = req.params;
 
-  if (!productImage.mimetype.startsWith("image")) {
-    throw new CustomError.BadRequestError("Error! Please upload an image!");
+  const product = await Product.findOne({ _id: productID });
+
+  if (!product) {
+    throw new CustomError.NotFoundError("Product not found!");
   }
 
-  const maxSize = 1024 * 1024;
+  const image = new Image({
+    url: req.file.location,
+    key: req.file.key,
+    originalName: req.file.originalname,
+    mimeType: req.file.mimetype,
+    size: req.file.size,
+    uploadedBy: req.user.userID,
+  });
 
-  if (productImage.size > maxSize) {
-    throw new CustomError.BadRequestError("Error! Size mustn't exceed 1 MB");
-  }
+  await image.save();
 
-  const imagePath = path.join(
-    __dirname,
-    "../../public/uploads/" + `${productImage.name}`
-  );
+   product.image = image.url;
+   await product.save();
 
-  await productImage.mv(imagePath);
-
-  res
-    .status(StatusCodes.CREATED)
-    .json({ image: `/uploads/${productImage.name}` });
+  res.status(StatusCodes.CREATED).json({ image });
 };
 
 module.exports = {
@@ -177,5 +178,5 @@ module.exports = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
-  uploadImage,
+  uploadProductImage
 };

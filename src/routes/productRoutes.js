@@ -11,12 +11,13 @@ const {
   getSingleProduct,
   updateProduct,
   deleteProduct,
-  uploadImage,
+  uploadProductImage,
 } = require("../controllers/productController");
 
 const { getSingleProductReviews } = require("../controllers/reviewController");
 
-const fileUpload = require("express-fileupload");
+const {upload} = require("../utils/upload-multerS3");
+const ensureFileIsPresent = require("../middleware/ensureFileIsPresent");
 
 /**
  * Express router for product-related routes
@@ -53,19 +54,19 @@ router
   .get(getAllProducts);
 
 /**
- * Route for uploading product images
+ * Route for uploading product image
  * 
- * @route POST /api/v1/products/uploadImage
+ * @route POST /api/v1/products/:id/uploadImage
  * 
  * @middleware authenticateUser - Ensures user is authenticated
  * @middleware authorizePermissions - Only admin can upload images
- * @middleware fileUpload - Handles file upload
+ * @middleware upload - Handles file upload using Multer with AWS S3
  */
 router
-  .route("/uploadImage")
+  .route("/:id/uploadImage")
   .post(
-    [authenticateUser, authorizePermissions("admin"), fileUpload()],
-    uploadImage
+    [authenticateUser, authorizePermissions("admin"), upload.single("image"), ensureFileIsPresent],
+    uploadProductImage
   );
 
 /**

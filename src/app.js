@@ -27,6 +27,7 @@ const userRouter = require("./routes/userRoutes");
 const productsRouter = require("./routes/productRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
 const orderRouter = require("./routes/orderRoutes");
+const imageRouter = require("./routes/imageRoutes");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const swaggerJson = require("../api-doc-swagger-openapi.json");
@@ -69,6 +70,7 @@ app.use(morgan("tiny"));
  * - productsRouter: Product management routes
  * - reviewRouter: Review management routes
  * - orderRouter: Order management routes
+ * - imageRouter: Image management routes
  * - swaggerUI: Swagger UI for API documentation
  */
 app.get("/", (req, res) => {
@@ -83,6 +85,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/images", imageRouter);
 
 app.use("/api/v1/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJson, {
   customCss: '.swagger-ui .topbar { display: none }',

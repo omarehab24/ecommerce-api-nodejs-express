@@ -34,6 +34,10 @@ This directory contains comprehensive test suites for the Ecommerce API, using N
   - Review retrieval
   - Review management
 
+- `image.test.js`: Image-related tests
+  - Image upload/download
+  - Image deletion
+
 - `user.test.js`: User profile and management tests
 
 ## Testing Framework
@@ -49,29 +53,5 @@ npm test -- tests/product.test.js
 npm test -- tests/review.test.js
 npm test -- tests/user.test.js
 npm test -- tests/order.test.js
+npm test -- tests/image.test.js
 ```
-
-## Test Configuration
-- Configuration file: `tests/config.js`
-- Manages test environment settings
-- Handles test database connection
-- Provides utility functions for test setup
-
-## Best Practices
-1. Each test file focuses on a specific domain/resource
-2. Use `beforeEach` for test setup and data reset
-3. Test both successful and failure scenarios
-4. Use descriptive test names
-5. Ensure tests are isolated and independent
-
-## Test Coverage
-- Aim for comprehensive coverage of API endpoints
-- Test various input scenarios
-- Validate response status codes
-- Use code coverage tools to identify untested code paths
-
-## Debugging Tests
-- Use `console.log()` or debug flags sparingly
-- Leverage Node.js inspector for detailed debugging
-- Check test output for detailed error information
-

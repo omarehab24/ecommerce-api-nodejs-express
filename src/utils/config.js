@@ -35,11 +35,21 @@ const GMAIL_PASS = process.env.GMAIL_PASS
 // Origin configuration for security
 const ORIGIN = process.env.ORIGIN
 
+// AWS S3 configuration
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
+const AWS_REGION = process.env.AWS_REGION
+
 module.exports = {
   MONGODB_URI,
   PORT,
   JWT_SECRET,
   GMAIL_PASS,
   GMAIL_EMAIL,
-  ORIGIN
+  ORIGIN,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_BUCKET_NAME,
+  AWS_REGION
 }

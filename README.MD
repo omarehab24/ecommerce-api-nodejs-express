@@ -20,6 +20,7 @@ Ngrok is used as a secure tunnel. Using a free domain temporarily.
 - **Order Processing**: Order creation and management system
 - **Review System**: Product review and rating functionality
 - **User Management**: User registration, profile management, and password recovery
+- **Image Storage**: AWS S3 for secure media storage
 
 ## Technical Stack
 - **Backend Framework**: Node.js with Express.js
@@ -69,6 +70,10 @@ Ngrok is used as a secure tunnel. Using a free domain temporarily.
 - Order creation and management
 - Order history
 - User-specific order tracking
+
+### 6. Images (`/images`)
+- Image upload and management
+- Image deletion
 
 ## Testing & Quality Assurance
 - Integration testing using supertest

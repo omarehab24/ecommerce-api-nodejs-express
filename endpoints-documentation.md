@@ -39,6 +39,12 @@ API Base URL: **https://kind-willingly-halibut.ngrok-free.app/api/v1**
   - [Get Single Order](#get-single-order)
   - [Update Order](#update-order)
   - [Get Current User Orders](#get-current-user-orders)
+- [Images](#images)
+  - [Upload Image](#upload-image)
+  - [Upload Multiple Images](#upload-multiple-images)
+  - [Get All Images](#get-all-images)
+  - [Get Single Image](#get-single-image)
+  - [Delete Image](#delete-image)
 
 ## Authentication
 
@@ -591,3 +597,73 @@ Get all orders for the currently authenticated user.
 - **Success Response**:
   - **Code**: 200
   - **Content**: Returns list of user's orders
+
+## Images
+
+### Upload Image
+
+Upload an image to S3 (admin).
+
+- **URL**: `/images/uploadImage`
+- **Method**: `POST`
+- **Auth required**: Yes
+- **Request Body**:
+  ```form-data
+  image: image file
+  ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**: Returns the uploaded image URL
+
+### Upload Multiple Images
+
+Upload multiple images to S3 (admin).
+
+- **URL**: `/images/uploadMultipleImages`
+- **Method**: `POST`
+- **Auth required**: Yes
+- **Request Body**:
+  ```form-data
+  images: image files
+  ```
+- **Success Response**:
+  - **Code**: 201
+  - **Content**: Returns the uploaded image URLs
+
+### Get All Images
+
+Get a list of all images.
+
+- **URL**: `/images/getAllImages`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns list of all images
+
+### Get Single Image
+
+Get details of a specific image by ID.
+
+- **URL**: `/images/getImage/{imageId}`
+- **Method**: `GET`
+- **Auth required**: No
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: Returns the image object
+
+### Delete Image
+
+Delete a specific image by ID (admin).
+
+- **URL**: `/images/deleteImage/{imageId}`
+- **Method**: `DELETE`
+- **Auth required**: Yes
+- **Success Response**:
+  - **Code**: 200
+  - **Content**:
+    ```json
+    {
+      "msg": "Image deleted successfully!"
+    }
+    ```

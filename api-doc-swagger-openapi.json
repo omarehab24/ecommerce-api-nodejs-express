@@ -2,9 +2,12 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Ecommerce API",
-    "version": "1.0.0"
+    "version": "0.1.0"
   },
   "servers": [
+    {
+      "url": "https://kind-willingly-halibut.ngrok-free.app"
+    },
     {
       "url": "https://ecommerce-api-e7iw.onrender.com/api/v1"
     }
@@ -24,6 +27,9 @@
     },
     {
       "name": "Orders"
+    },
+    {
+      "name": "Images"
     }
   ],
   "components": {
@@ -1365,6 +1371,209 @@
                       }
                     ],
                     "count": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/uploadImage": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "Upload image",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "image": {
+                      "url": "https://s3.29325.s3.us-east-1.amazonaws.com/uploads/1743714478732-computer-3.jpeg",
+                      "key": "uploads/1743714478732-computer-3.jpeg",
+                      "originalName": "computer-3.jpeg",
+                      "mimetype": "image/jpeg",
+                      "size": 57567,
+                      "createdAt": "2025-03-02T22:54:38.134Z",
+                      "updatedAt": "2025-03-02T22:54:38.134Z",
+                      "id": "67c4e1aeacf955dc5c5b7834"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/uploadMultipleImages": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "Upload multiple images",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "images": [
+                      {
+                        "url": "https://s3.29325.s3.us-east-1.amazonaws.com/uploads/1743714478732-computer-3.jpeg",
+                        "key": "uploads/1743714478732-computer-3.jpeg",
+                        "originalName": "computer-3.jpeg",
+                        "mimetype": "image/jpeg",
+                        "size": 57567,
+                        "createdAt": "2025-03-02T22:54:38.134Z",
+                        "updatedAt": "2025-03-02T22:54:38.134Z",
+                        "id": "67c4e1aeacf955dc5c5b7834"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/getAllImages": {
+      "get": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "Get all images",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "images": [
+                      {
+                        "url": "https://s3.29325.s3.us-east-1.amazonaws.com/uploads/1743714478732-computer-3.jpeg",
+                        "key": "uploads/1743714478732-computer-3.jpeg",
+                        "originalName": "computer-3.jpeg",
+                        "mimetype": "image/jpeg",
+                        "size": 57567,
+                        "createdAt": "2025-03-02T22:54:38.134Z",
+                        "updatedAt": "2025-03-02T22:54:38.134Z",
+                        "id": "67c4e1aeacf955dc5c5b7834"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/getImage/67c4e1aeacf955dc5c5b7834": {
+      "get": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "Get single image",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "image": {
+                      "url": "https://s3.29325.s3.us-east-1.amazonaws.com/uploads/1743714478732-computer-3.jpeg",
+                      "key": "uploads/1743714478732-computer-3.jpeg",
+                      "originalName": "computer-3.jpeg",
+                      "mimetype": "image/jpeg",
+                      "size": 57567,
+                      "createdAt": "2025-03-02T22:54:38.134Z",
+                      "updatedAt": "2025-03-02T22:54:38.134Z",
+                      "id": "67c4e1aeacf955dc5c5b7834"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/deleteImage/67c4e1aeacf955dc5c5b7834": {
+      "delete": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "Delete image",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "msg": "Image deleted successfully!"
                   }
                 }
               }
