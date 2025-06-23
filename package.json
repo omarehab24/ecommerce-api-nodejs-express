@@ -12,6 +12,7 @@
     "test:reviews": "NODE_ENV=test node --test ./tests/review.test.js",
     "test:orders": "NODE_ENV=test node --test ./tests/order.test.js",
     "test:images": "NODE_ENV=test node --test ./tests/image.test.js",
+    "test": "npm run test:auth && npm run test:users && npm run test:products && npm run test:reviews && npm run test:orders && npm run test:images",
     "lint": "eslint ."
   },
   "author": "Omar Ehab",
