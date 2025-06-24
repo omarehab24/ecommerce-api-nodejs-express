@@ -30,10 +30,11 @@ jobs:
     
     - run: npm run build --if-present
 
+    # Create .env file, as tests require env variables
     - name: Create .env file
       run: echo "${{ secrets.PROD_FULL_ENV_FILE }}" > .env
     
-    # - run: npm test
+    - run: npm test
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
@@ -51,8 +52,8 @@ jobs:
           push: true
           tags: 22omar/store-api-node-express:latest
 
-   # Deploy to your server
-    - name: Deploy to server
+      # Docker stack deploy has issues, will look into it later
+    - name: Deploy to AWS EC2 server
       uses: appleboy/ssh-action@v1.2.2
       with:
           host: ${{ secrets.AWS_SERVER_HOST }}
@@ -61,8 +62,8 @@ jobs:
           script: |
             cd ecommerce-api-nodejs-express
             git pull
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
             docker compose -f docker-compose.yml -f docker-compose.prod.yml down
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --scale node-app=2
 
 

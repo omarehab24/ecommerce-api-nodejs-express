@@ -47,25 +47,34 @@ docker run --name store-api-node-express-container --rm -d \
 
 #### Development Setup
 ```bash
+# Pull development image
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml pull
+
 # Start development environment
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
 #### Production Setup
 ```bash
+# Pull production image
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+
 # Start production environment
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 ### Docker Swarm Deployment
 ```bash
+# Initialize Docker Swarm (first time)
+docker swarm init
+
 # Deploy to Docker Swarm
 docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml store-api-node-express-swarm
 
 # Remove Swarm deployment
 docker stack rm store-api-node-express
 
-# Leave Swarm mode
+# To leave Swarm mode
 docker swarm leave --force
 ```
 
